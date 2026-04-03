@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RealLife RP — Serveur GTA RP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #f0a500;
+      --gold-light: #ffd060;
+      --gold-dark: #a06800;
+      --gold-glow: rgba(240, 165, 0, 0.35);
+      --bg: #0a0804;
+      --bg2: #110e06;
+      --bg3: #1a1508;
+      --text: #f5e8c8;
+      --text-dim: #a08050;
+      --border: rgba(240, 165, 0, 0.2);
+    }
+ 
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+ 
+    html { scroll-behavior: smooth; }
+ 
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Exo 2', sans-serif;
+      overflow-x: hidden;
+    }
+ 
+    /* ─── PARTICLES BACKGROUND ─── */
+    #particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--gold);
+      animation: float linear infinite;
+      opacity: 0;
+    }
+    @keyframes float {
+      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.3; }
+      100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+    }
+ 
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 70px;
+      background: linear-gradient(180deg, rgba(10,8,4,0.98) 0%, rgba(10,8,4,0.7) 100%);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.6rem;
+      letter-spacing: 3px;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+    .nav-links a:hover {
+      color: var(--gold-light);
+      text-shadow: 0 0 12px var(--gold-glow);
+    }
+    .nav-cta {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      border: none;
+      padding: 9px 22px;
+      cursor: pointer;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px var(--gold-glow);
+    }
+ 
+    /* ─── HERO ─── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 20px 60px;
+      z-index: 1;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 40%, rgba(240,165,0,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 80% 60% at 50% 80%, rgba(160,104,0,0.08) 0%, transparent 70%);
+      z-index: -1;
+    }
+    .city-silhouette {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 220px;
+      background: linear-gradient(180deg, transparent 0%, rgba(240,165,0,0.03) 100%);
+      z-index: -1;
+    }
+    .hero-badge {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--border);
+      padding: 6px 18px;
+      margin-bottom: 28px;
+      clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+      background: rgba(240,165,0,0.06);
+      animation: fadeDown 0.8s ease both;
+    }
+    .hero-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(4rem, 12vw, 9rem);
+      line-height: 0.9;
+      letter-spacing: 4px;
+      background: linear-gradient(135deg, #fff8e0 0%, var(--gold-light) 30%, var(--gold) 60%, var(--gold-dark) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 40px rgba(240,165,0,0.4));
+      animation: fadeUp 1s ease 0.2s both;
+    }
+    .hero-sub {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(1.4rem, 4vw, 2.6rem);
+      letter-spacing: 8px;
+      color: var(--gold-light);
+      opacity: 0.7;
+      margin-top: 8px;
+      animation: fadeUp 1s ease 0.4s both;
+    }
+    .hero-desc {
+      max-width: 560px;
+      margin: 28px auto 0;
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text-dim);
+      font-weight: 300;
+      animation: fadeUp 1s ease 0.6s both;
+    }
+    .hero-btns {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 40px;
+      animation: fadeUp 1s ease 0.8s both;
+    }
+    .btn-primary {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      border: none;
+      padding: 14px 36px;
+      cursor: pointer;
+      clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+      text-decoration: none;
+      display: inline-block;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 36px var(--gold-glow);
+    }
+    .btn-secondary {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: transparent;
+      border: 1px solid var(--gold);
+      padding: 14px 36px;
+      cursor: pointer;
+      clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.3s, color 0.3s;
+    }
+    .btn-secondary:hover {
+      background: rgba(240,165,0,0.1);
+    }
+    .scroll-hint {
+      margin-top: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.4;
+      animation: bounce 2s ease-in-out infinite;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .scroll-hint::after {
+      content: '';
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(180deg, var(--gold), transparent);
+    }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+ 
+    /* ─── STATS BAR ─── */
+    .stats-bar {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: rgba(240,165,0,0.04);
+      flex-wrap: wrap;
+    }
+    .stat-item {
+      flex: 1;
+      min-width: 160px;
+      padding: 28px 20px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+      position: relative;
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 2.6rem;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+ 
+    /* ─── SECTIONS ─── */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 100px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-label::before {
+      content: '';
+      height: 1px;
+      width: 30px;
+      background: var(--gold);
+    }
+    .section-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      letter-spacing: 3px;
+      line-height: 1;
+      background: linear-gradient(135deg, #fff8e0, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 50px;
+    }
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0;
+      position: relative;
+      z-index: 1;
+    }
+ 
+    /* ─── LORE ─── */
+    #lore .lore-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .lore-card {
+      background: linear-gradient(135deg, rgba(240,165,0,0.06), rgba(240,165,0,0.02));
+      border: 1px solid var(--border);
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .lore-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: linear-gradient(180deg, var(--gold-light), var(--gold-dark));
+    }
+    .lore-card:hover {
+      border-color: rgba(240,165,0,0.4);
+      box-shadow: 0 0 30px rgba(240,165,0,0.08);
+    }
+    .lore-card.wide {
+      grid-column: 1 / -1;
+    }
+    .lore-icon {
+      font-size: 2rem;
+      margin-bottom: 14px;
+      filter: sepia(1) saturate(3) hue-rotate(5deg);
+    }
+    .lore-card h3 {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.4rem;
+      letter-spacing: 2px;
+      color: var(--gold-light);
+      margin-bottom: 12px;
+    }
+    .lore-card p {
+      font-size: 0.92rem;
+      line-height: 1.85;
+      color: var(--text-dim);
+      font-weight: 300;
+    }
+ 
+    /* ─── RÈGLEMENT ─── */
+    #reglement .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .rule-block {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .rule-block:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(240,165,0,0.1);
+    }
+    .rule-block::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold-light), var(--gold-dark));
+    }
+    .rule-num {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 3rem;
+      line-height: 1;
+      color: rgba(240,165,0,0.12);
+      position: absolute;
+      top: 16px; right: 20px;
+    }
+    .rule-block h3 {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .rule-block h3 span { font-size: 1.1rem; }
+    .rule-block ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .rule-block ul li {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      padding-left: 14px;
+      position: relative;
+      line-height: 1.6;
+    }
+    .rule-block ul li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--gold-dark);
+      font-size: 0.7rem;
+      top: 3px;
+    }
+ 
+    /* ─── STAFF ─── */
+    #staff .staff-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .staff-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 32px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .staff-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 50px rgba(240,165,0,0.15);
+    }
+    .staff-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(240,165,0,0.06) 0%, transparent 60%);
+    }
+    .staff-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 16px;
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 20px var(--gold-glow);
+      position: relative;
+    }
+    .staff-name {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: 1px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .staff-role {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      display: inline-block;
+    }
+    .role-fondateur { color: var(--gold-light); background: rgba(240,165,0,0.12); border: 1px solid rgba(240,165,0,0.3); }
+    .role-admin     { color: #e87040; background: rgba(232,112,64,0.1); border: 1px solid rgba(232,112,64,0.3); }
+    .role-modo      { color: #60b8ff; background: rgba(96,184,255,0.1); border: 1px solid rgba(96,184,255,0.3); }
+    .role-dev       { color: #80ff90; background: rgba(128,255,144,0.1); border: 1px solid rgba(128,255,144,0.3); }
+    .role-support   { color: #c890ff; background: rgba(200,144,255,0.1); border: 1px solid rgba(200,144,255,0.3); }
+    .staff-desc {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      margin-top: 12px;
+      line-height: 1.6;
+    }
+ 
+    /* ─── BOUTIQUE ─── */
+    #boutique .shop-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .shop-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+    }
+    .shop-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 50px rgba(240,165,0,0.15);
+    }
+    .shop-card-header {
+      padding: 32px 24px 20px;
+      background: linear-gradient(135deg, rgba(240,165,0,0.1), rgba(240,165,0,0.03));
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .shop-icon { font-size: 2.8rem; margin-bottom: 10px; display: block; }
+    .shop-name {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+      color: var(--gold-light);
+    }
+    .shop-price {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 2rem;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 1px;
+    }
+    .shop-price span {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      -webkit-text-fill-color: var(--text-dim);
+    }
+    .shop-card-body { padding: 20px 24px 24px; }
+    .shop-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .shop-features li {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .shop-features li::before { content: '✦'; color: var(--gold); font-size: 0.6rem; }
+    .shop-badge {
+      position: absolute;
+      top: 12px; right: 12px;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: var(--gold);
+      color: var(--bg);
+      padding: 4px 10px;
+      clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+    }
+ 
+    /* ─── REJOINDRE ─── */
+    #rejoindre {
+      text-align: center;
+    }
+    #rejoindre .section-label { justify-content: center; }
+    #rejoindre .section-label::before { display: none; }
+    .join-box {
+      max-width: 700px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, rgba(240,165,0,0.08), rgba(240,165,0,0.02));
+      border: 1px solid rgba(240,165,0,0.3);
+      padding: 60px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .join-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(240,165,0,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .join-discord-icon {
+      font-size: 4rem;
+      display: block;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 20px rgba(240,165,0,0.5));
+    }
+    .join-box h3 {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 2.2rem;
+      letter-spacing: 3px;
+      color: var(--gold-light);
+      margin-bottom: 16px;
+    }
+    .join-box p {
+      color: var(--text-dim);
+      line-height: 1.8;
+      margin-bottom: 32px;
+      font-weight: 300;
+    }
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      max-width: 120px;
+    }
+    .step-num {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.2rem;
+      color: var(--bg);
+      box-shadow: 0 0 16px var(--gold-glow);
+    }
+    .step p {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-align: center;
+      color: var(--text-dim);
+      margin: 0;
+    }
+ 
+    /* ─── FOOTER ─── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 40px 20px;
+      background: rgba(0,0,0,0.3);
+    }
+    footer .footer-logo {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.4rem;
+      letter-spacing: 4px;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+    footer p {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+ 
+    /* ─── KEYFRAMES ─── */
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+ 
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      section { padding: 70px 20px; }
+      #lore .lore-grid { grid-template-columns: 1fr; }
+      .join-box { padding: 40px 20px; }
+    }
+ 
+    /* ─── REVEAL ANIMATION ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+ 
+  <!-- PARTICLES -->
+  <div id="particles"></div>
+ 
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">RealLife RP</div>
+    <ul class="nav-links">
+      <li><a href="#lore">La Ville</a></li>
+      <li><a href="#reglement">Règlement</a></li>
+      <li><a href="#staff">Staff</a></li>
+      <li><a href="#boutique">Boutique</a></li>
+      <li><a href="#rejoindre">Rejoindre</a></li>
+    </ul>
+    <a href="#rejoindre" class="nav-cta">Rejoindre</a>
+  </nav>
+ 
+  <!-- HERO -->
+  <div id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-badge">✦ Serveur GTA RP Français ✦</div>
+    <h1 class="hero-title">RealLife<br>RP</h1>
+    <p class="hero-sub">Vis ta vie. Écris ton histoire.</p>
+    <p class="hero-desc">
+      Un serveur GTA RP immersif, sérieux et communautaire.
+      Chaque personnage a une histoire. Quelle sera la tienne ?
+    </p>
+    <div class="hero-btns">
+      <a href="#rejoindre" class="btn-primary">Rejoindre le serveur</a>
+      <a href="#lore" class="btn-secondary">Découvrir la ville</a>
+    </div>
+    <div class="scroll-hint">Défiler</div>
+  </div>
+ 
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-num">500+</div>
+      <div class="stat-label">Membres</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">Serveur en ligne</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">15+</div>
+      <div class="stat-label">Métiers disponibles</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">RP Sérieux</div>
+    </div>
+  </div>
+ 
+  <div class="divider"></div>
+ 
+  <!-- LORE -->
+  <section id="lore">
+    <div class="section-label reveal">La Ville</div>
+    <h2 class="section-title reveal">Bienvenue à<br>Los Santos Reborn</h2>
+    <div class="lore-grid">
+      <div class="lore-card wide reveal">
+        <div class="lore-icon">🏙️</div>
+        <h3>L'Histoire de la Ville</h3>
+        <p>
+          Los Santos Reborn est une mégalopole en pleine expansion, nichée entre les plages dorées du Pacifique et les collines arides du désert de Blaine County. Fondée dans les années 1870 par des chercheurs d'or et des pionniers, la ville s'est transformée au fil des décennies en une métropole tentaculaire, carrefour de toutes les ambitions et de tous les dangers.
+          <br><br>
+          Aujourd'hui, Los Santos Reborn est une ville à deux visages : d'un côté, les gratte-ciels étincelants de Vinewood et les villas luxueuses de Rockford Hills, de l'autre, les rues agitées du South LS et les zones industrielles portuaires où la loi est souvent négociée à coups de billets. C'est dans cette tension permanente que votre personnage va écrire son histoire.
+        </p>
+      </div>
+      <div class="lore-card reveal">
+        <div class="lore-icon">⚖️</div>
+        <h3>Les Institutions</h3>
+        <p>Le LSPD maintient l'ordre dans les rues, le département de justice veille aux procès, et la mairie gère les affaires publiques. Chaque institution offre une carrière unique et des responsabilités réelles au sein du serveur.</p>
+      </div>
+      <div class="lore-card reveal">
+        <div class="lore-icon">🌆</div>
+        <h3>L'Économie Réelle</h3>
+        <p>Chaque dollar est gagné à la sueur de ton front : jobs légaux, entreprises, immobilier, ou… les activités de la pègre. L'économie du serveur est dynamique et player-driven — tes choix ont un impact réel.</p>
+      </div>
+      <div class="lore-card reveal">
+        <div class="lore-icon">🔫</div>
+        <h3>Le Crime Organisé</h3>
+        <p>Les gangs et familles criminelles se partagent les quartiers de la ville. Rejoindre une organisation, gravir les échelons, tisser des alliances ou trahir ses frères — le monde souterrain de Los Santos n'attend que toi.</p>
+      </div>
+      <div class="lore-card reveal">
+        <div class="lore-icon">🚑</div>
+        <h3>Les Services d'Urgence</h3>
+        <p>Médecins, pompiers, urgentistes — les services de secours sont la colonne vertébrale de la ville. Sans eux, chaque balle tirée, chaque accident de voiture pourrait être fatal. Un rôle crucial, exigeant et valorisant.</p>
+      </div>
+    </div>
+  </section>
+ 
+  <div class="divider"></div>
+ 
+  <!-- RÈGLEMENT -->
+  <section id="reglement">
+    <div class="section-label reveal">Règlement</div>
+    <h2 class="section-title reveal">Les Règles du Jeu</h2>
+    <div class="rules-grid">
+ 
+      <div class="rule-block reveal">
+        <div class="rule-num">01</div>
+        <h3><span>🎭</span> Roleplay</h3>
+        <ul>
+          <li>Rester en personnage en permanence dans les zones de jeu</li>
+          <li>Le RDM (Random Death Match) est strictement interdit</li>
+          <li>Le VDM (Vehicle Death Match) est interdit sans contexte RP</li>
+          <li>Respecter le Fear RP : ton personnage a peur de la mort</li>
+          <li>Interdiction de briser le RP (Break Character) sans raison valable</li>
+        </ul>
+      </div>
+ 
+      <div class="rule-block reveal">
+        <div class="rule-num">02</div>
+        <h3><span>🤝</span> Respect</h3>
+        <ul>
+          <li>Respect de tous les joueurs, staff inclus, à tout moment</li>
+          <li>Aucune discrimination, harcèlement ou propos haineux</li>
+          <li>Les conflits en jeu restent en jeu — pas de drama externe</li>
+          <li>Signaler les bugs ou exploits au staff plutôt qu'en abuser</li>
+        </ul>
+      </div>
+ 
+      <div class="rule-block reveal">
+        <div class="rule-num">03</div>
+        <h3><span>🔊</span> Interactions</h3>
+        <ul>
+          <li>Utiliser un micro de qualité correcte pour le RP vocal</li>
+          <li>Pas de musique ou bruits parasites dans les zones RP</li>
+          <li>Les négociations doivent être menées en RP avant tout conflit</li>
+          <li>Respecter les zones de safe (hôpital, spawn initial)</li>
+        </ul>
+      </div>
+ 
+      <div class="rule-block reveal">
+        <div class="rule-num">04</div>
+        <h3><span>🚔</span> Activités Criminelles</h3>
+        <ul>
+          <li>Maximum 4 personnes pour les vols de banque</li>
+          <li>Les prises d'otages doivent avoir un scénario RP cohérent</li>
+          <li>Laisser une chance aux forces de l'ordre de négocier</li>
+          <li>Pas de crimes sur les nouveaux joueurs (whitelist 24h)</li>
+        </ul>
+      </div>
+ 
+      <div class="rule-block reveal">
+        <div class="rule-num">05</div>
+        <h3><span>💻</span> Anti-Cheat</h3>
+        <ul>
+          <li>Tout cheat, mod non-autorisé ou exploit = ban permanent</li>
+          <li>Les menus de trainers sont interdits en jeu</li>
+          <li>Ne pas exploiter les bugs du serveur — les signaler</li>
+          <li>Toute transaction hors-serveur (IRL money) est bannable</li>
+        </ul>
+      </div>
+ 
+      <div class="rule-block reveal">
+        <div class="rule-num">06</div>
+        <h3><span>📋</span> Création du Perso</h3>
+        <ul>
+          <li>Le nom du personnage doit être réaliste (pas de pseudo gaming)</li>
+          <li>Le backstory doit être approuvé avant le premier jeu</li>
+          <li>La mort permanente (Perma-Death) peut être imposée par le staff</li>
+          <li>Maximum 2 personnages actifs par joueur</li>
+        </ul>
+      </div>
+ 
+    </div>
+  </section>
+ 
+  <div class="divider"></div>
+ 
+  <!-- STAFF -->
+  <section id="staff">
+    <div class="section-label reveal">L'Équipe</div>
+    <h2 class="section-title reveal">Notre Staff</h2>
+    <div class="staff-grid">
+ 
+      <div class="staff-card reveal">
+        <div class="staff-avatar">👑</div>
+        <div class="staff-name">[ Fondateur ]</div>
+        <span class="staff-role role-fondateur">Fondateur</span>
+        <p class="staff-desc">À la tête du serveur depuis le premier jour. Visionnaire et garant de l'expérience RealLife RP.</p>
+      </div>
+ 
+      <div class="staff-card reveal">
+        <div class="staff-avatar">⚡</div>
+        <div class="staff-name">[ Co-Fondateur ]</div>
+        <span class="staff-role role-fondateur">Co-Fondateur</span>
+        <p class="staff-desc">Pilier du projet, gère la stratégie globale et la direction créative du serveur.</p>
+      </div>
+ 
+      <div class="staff-card reveal">
+        <div class="staff-avatar">🛡️</div>
+        <div class="staff-name">[ Admin Chef ]</div>
+        <span class="staff-role role-admin">Administrateur</span>
+        <p class="staff-desc">Supervise l'ensemble de la modération, gère les sanctions et veille au respect du règlement.</p>
+      </div>
+ 
+      <div class="staff-card reveal">
+        <div class="staff-avatar">🔧</div>
+        <div class="staff-name">[ Développeur ]</div>
+        <span class="staff-role role-dev">Développeur</span>
+        <p class="staff-desc">Développe les scripts et features exclusives du serveur pour une expérience toujours plus immersive.</p>
+      </div>
+ 
+      <div class="staff-card reveal">
+        <div class="staff-avatar">🎯</div>
+        <div class="staff-name">[ Modérateur ]</div>
+        <span class="staff-role role-modo">Modérateur</span>
+        <p class="staff-desc">Présent en jeu pour faire respecter les règles et accompagner les joueurs au quotidien.</p>
+      </div>
+ 
+      <div class="staff-card reveal">
+        <div class="staff-avatar">💬</div>
+        <div class="staff-name">[ Support ]</div>
+        <span class="staff-role role-support">Support</span>
+        <p class="staff-desc">Là pour répondre à vos questions sur Discord et vous aider à vous intégrer dans la communauté.</p>
+      </div>
+ 
+    </div>
+    <p style="text-align:center; margin-top:36px; color:var(--text-dim); font-size:0.85rem; font-style:italic;">
+      Tu veux rejoindre le staff ? Ouvre un ticket sur notre Discord !
+    </p>
+  </section>
+ 
+  <div class="divider"></div>
+ 
+  <!-- BOUTIQUE -->
+  <section id="boutique">
+    <div class="section-label reveal">Boutique</div>
+    <h2 class="section-title reveal">Soutiens le Serveur</h2>
+    <p class="reveal" style="color:var(--text-dim);margin-top:-30px;margin-bottom:40px;max-width:580px;line-height:1.8;font-weight:300;">
+      Tous les achats sont cosmétiques ou liés au confort — jamais un avantage pay-to-win. Le RP reste équitable pour tous.
+    </p>
+    <div class="shop-grid">
+ 
+      <div class="shop-card reveal">
+        <div class="shop-card-header">
+          <span class="shop-icon">🥉</span>
+          <div class="shop-name">Citoyen</div>
+          <div class="shop-price">5€ <span>/ mois</span></div>
+        </div>
+        <div class="shop-card-body">
+          <ul class="shop-features">
+            <li>Rôle exclusif sur Discord</li>
+            <li>Accès au salon VIP Discord</li>
+            <li>Plaque d'immatriculation personnalisée</li>
+            <li>Priorité sur la file d'attente</li>
+          </ul>
+          <a href="#rejoindre" class="btn-secondary" style="width:100%;text-align:center;display:block;clip-path:none;padding:12px;">Choisir</a>
+        </div>
+      </div>
+ 
+      <div class="shop-card reveal">
+        <div class="shop-badge">Populaire</div>
+        <div class="shop-card-header">
+          <span class="shop-icon">🥇</span>
+          <div class="shop-name">Élite</div>
+          <div class="shop-price">10€ <span>/ mois</span></div>
+        </div>
+        <div class="shop-card-body">
+          <ul class="shop-features">
+            <li>Tout du pack Citoyen</li>
+            <li>Garage privé supplémentaire</li>
+            <li>Tenue exclusive en jeu</li>
+            <li>Appartement de luxe offert</li>
+            <li>Nom personnalisé en jeu</li>
+          </ul>
+          <a href="#rejoindre" class="btn-primary" style="width:100%;text-align:center;display:block;clip-path:none;padding:12px;">Choisir</a>
+        </div>
+      </div>
+ 
+      <div class="shop-card reveal">
+        <div class="shop-card-header">
+          <span class="shop-icon">💎</span>
+          <div class="shop-name">Diamond</div>
+          <div class="shop-price">20€ <span>/ mois</span></div>
+        </div>
+        <div class="shop-card-body">
+          <ul class="shop-features">
+            <li>Tout du pack Élite</li>
+            <li>Véhicule unique & exclusif</li>
+            <li>Accès aux événements privés</li>
+            <li>Business exclusif à ouvrir</li>
+            <li>Insigne Diamond sur Discord</li>
+            <li>Support prioritaire</li>
+          </ul>
+          <a href="#rejoindre" class="btn-secondary" style="width:100%;text-align:center;display:block;clip-path:none;padding:12px;">Choisir</a>
+        </div>
+      </div>
+ 
+    </div>
+  </section>
+ 
+  <div class="divider"></div>
+ 
+  <!-- REJOINDRE -->
+  <section id="rejoindre">
+    <div class="section-label reveal">Rejoindre</div>
+    <h2 class="section-title reveal">Prêt à commencer<br>ton histoire ?</h2>
+    <div class="join-box reveal">
+      <span class="join-discord-icon">🎮</span>
+      <h3>Rejoins RealLife RP</h3>
+      <p>
+        Pour rejoindre le serveur, commence par intégrer notre communauté Discord.
+        Tu y trouveras les instructions de connexion, le formulaire de whitelist,
+        et toute l'aide dont tu as besoin pour créer ton premier personnage.
+      </p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <p>Rejoins le Discord</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <p>Lis le règlement</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <p>Fais ta whitelist</p>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <p>Joue et profite !</p>
+        </div>
+      </div>
+      <!-- ⚠️ Remplace le lien ci-dessous par ton vrai lien Discord -->
+      <a href="https://discord.gg/TONLIEN" target="_blank" class="btn-primary" style="font-size:1rem;padding:16px 44px;display:inline-block;">
+        🔗 &nbsp; Rejoindre le Discord
+      </a>
+      <p style="margin-top:20px;font-size:0.78rem;color:var(--text-dim);">
+        ⚠️ Remplace "TONLIEN" dans le code par ton vrai lien d'invitation Discord
+      </p>
+    </div>
+  </section>
+ 
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">RealLife RP</div>
+    <p>© 2025 RealLife RP — Serveur GTA RP Français — Tous droits réservés</p>
+    <p style="margin-top:8px;font-size:0.72rem;opacity:0.5;">Ce site n'est pas affilié à Rockstar Games ou Take-Two Interactive.</p>
+  </footer>
+ 
+  <script>
+    // PARTICLES
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 40; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random() * 3 + 1;
+      p.style.cssText = `
+        width: ${size}px; height: ${size}px;
+        left: ${Math.random() * 100}%;
+        animation-duration: ${Math.random() * 12 + 8}s;
+        animation-delay: ${Math.random() * 10}s;
+      `;
+      container.appendChild(p);
+    }
+ 
+    // SCROLL REVEAL
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+ 
+    // STAGGERED REVEALS
+    document.querySelectorAll('.rules-grid .rule-block, .staff-grid .staff-card, .shop-grid .shop-card, .lore-grid .lore-card').forEach((el, i) => {
+      el.style.transitionDelay = (i * 0.08) + 's';
+    });
+  </script>
+</body>
+</html>
+ 
